@@ -13,10 +13,8 @@ pub struct CreateUserPayload {
 
 /// Handler to create a new user (v1).
 pub async fn create_user(Json(payload): Json<CreateUserPayload>) -> impl IntoResponse {
-    // Create a new User instance
     let user = User::new(payload.name, payload.email);
 
-    // Add user to the database
     match add_user(user.clone()) {
         Ok(_) => (StatusCode::CREATED, Json(user)).into_response(),
         Err(_) => (StatusCode::INTERNAL_SERVER_ERROR, "Failed to create user").into_response(),

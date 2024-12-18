@@ -8,7 +8,6 @@ use std::{
 
 use anyhow::Result;
 use lazy_static::lazy_static;
-// Import anyhow::Result
 
 /// Path to the JSON file acting as the database.
 const DB_PATH: &str = "db/users.json";
@@ -20,9 +19,7 @@ lazy_static! {
 
 /// Loads users from the JSON file.
 fn load_users() -> Result<Vec<User>> {
-    // Change return type
     if !Path::new(DB_PATH).exists() {
-        // If the file doesn't exist, create it with an empty array
         let file = File::create(DB_PATH)?;
         serde_json::to_writer(file, &Vec::<User>::new())?;
     }
@@ -36,7 +33,6 @@ fn load_users() -> Result<Vec<User>> {
 
 /// Saves the current state of users to the JSON file.
 fn save_users(users: &Vec<User>) -> Result<()> {
-    // Change return type
     let file = OpenOptions::new()
         .write(true)
         .truncate(true)
@@ -47,7 +43,6 @@ fn save_users(users: &Vec<User>) -> Result<()> {
 
 /// Adds a new user to the database.
 pub fn add_user(user: User) -> Result<()> {
-    // Change return type
     let mut users = USERS.lock().unwrap();
     users.push(user);
     save_users(&users)
