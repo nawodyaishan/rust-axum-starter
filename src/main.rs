@@ -3,8 +3,8 @@ mod handlers;
 mod models;
 mod routes;
 
-use axum::Server;
-use std::net::SocketAddr;
+use axum::serve;
+use tokio::net::TcpListener;
 use tower::ServiceBuilder;
 use tower_http::trace::TraceLayer;
 
@@ -16,11 +16,8 @@ async fn main() {
             .into_inner(),
     );
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    println!("🚀 Server running at http://{}", addr);
+    let listener = TcpListener::bind("127.0.0.1:3000").await.unwrap();
+    println!("listening on {}", listener.local_addr().unwrap());
 
-    Server::bind(&addr)
-        .serve(app.into_make_service())
-        .await
-        .unwrap();
+    serve(listener, app).await.unwrap();
 }
